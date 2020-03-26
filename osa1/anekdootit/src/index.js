@@ -8,21 +8,41 @@ const Button = ({ onClick, text }) => (
 )
 
 const App = (props) => {
-  const [selected, setSelected] = useState(0)
+  const [selected, setSelected] = useState(0);
+  const [count, setCount] = useState(0)
 
   const handleClick = () => {
     setSelected(Math.round(Math.random()*5));
-    console.log(selected);
+  }
+
+  const handleVote = () => {
+    points[selected] += 1;
+    console.log(points);
+  }
+
+  const handleMost = () => {
+    setCount(points.indexOf(Math.max(...points)))
+    console.log(count)
   }
 
   return (
     <div>
+      <h2>Anecdote of the day</h2>
       {props.anecdotes[selected]}
-      <br></br>
-      <Button onClick={handleClick} text="next anecdote"/>
+      <br></br><br></br>
+      Has {points[selected]} points
+      <br></br><br></br>
+      <Button onClick={handleVote} text="vote"/>
+      <Button onClick={() => {handleClick(); handleMost();}} text="next anecdote"/>
+      <h2>Anecdote with most votes</h2>
+      {props.anecdotes[count]}
+      <br></br><br></br>
+      Has {Math.max(...points)} points
     </div>
   )
 }
+
+const points = [0, 0, 0, 0, 0, 0]
 
 const anecdotes = [
   'If it hurts, do it more often',
