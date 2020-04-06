@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import React from 'react'
 
 const CountryInfo = ({country}) =>  {
   
@@ -13,11 +12,11 @@ const CountryInfo = ({country}) =>  {
       <h3>Spoken languages</h3>
       <ul>
         {country.languages.map(language =>
-          <li key={language}>{language.name}</li>
+          <li key={language.iso639_2}>{language.name}</li>
         )}
       </ul>
 
-      <img src={country.flag} width="10%" height="10%"/>
+      <img src={country.flag} alt={"Flag of " + country.name} width="10%" height="10%"/>
 
     </div>
   )
