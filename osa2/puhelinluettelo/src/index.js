@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import App from './App'
 
 const notes = [
-  { name: "Arto Hellas", number: "040-1234567" },
+  { name: "", number: "" },
 ]
 
 ReactDOM.render(
