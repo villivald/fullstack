@@ -10,16 +10,12 @@ const App = (props) => {
   const [search, setSearch] = useState('')
 
   useEffect(() => {
-    console.log('effect')
     axios
       .get('http://localhost:3001/persons')
       .then(response => {
-        console.log('promise fulfilled')
         setNotes(response.data)
       })
   }, [])
-
-  console.log('render', notes.length, 'notes')
 
   const handleNoteChange = (event) => {
     setNewName(event.target.value)
@@ -39,6 +35,13 @@ const App = (props) => {
       name: newName,
       number: newNumber,
     }
+
+    axios
+    .post('http://localhost:3001/persons', noteObject)
+    .then(response => {
+      setNotes(notes.concat(response.data))
+      setNewName('')
+    })
 
     if(notes.some(note => note.name === newName)) {
       window.alert(` ${newName} is already added to phonebook`);

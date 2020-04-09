@@ -8,11 +8,9 @@ const App = () => {
   const [showAll, setShowAll] = useState(true)
 
   useEffect(() => {
-    console.log('effect')
     axios
       .get('http://localhost:3001/notes')
       .then(response => {
-        console.log('promise fulfilled')
         setNotes(response.data)
       })
   }, [])
@@ -27,6 +25,13 @@ const App = () => {
       important: Math.random() > 0.5,
       id: notes.length + 1,
     }
+
+    axios
+    .post('http://localhost:3001/notes', noteObject)
+    .then(response => {
+      setNotes(notes.concat(response.data))
+      setNewNote('')
+    })
   
     setNotes(notes.concat(noteObject))
     setNewNote('')
@@ -41,6 +46,16 @@ const App = () => {
   ? notes
   : notes.filter(note => note.important === true)
 
+  const toggleImportanceOf = id => {
+    const url = `http://localhost:3001/notes/${id}`
+    const note = notes.find(n => n.id === id)
+    const changedNote = { ...note, important: !note.important }
+  
+    axios.put(url, changedNote).then(response => {
+      setNotes(notes.map(note => note.id !== id ? note : response.data))
+    })
+  }
+
   return (
     <div>
       <h1>Notes</h1>
@@ -51,7 +66,7 @@ const App = () => {
       </div>
       <ul>
       {notesToShow.map((note, i) => 
-          <Note key={i} note={note} />
+          <Note key={i} note={note} toggleImportance={() => toggleImportanceOf(note.id)}/>
         )}
       </ul>
       <form onSubmit={addNote}>
