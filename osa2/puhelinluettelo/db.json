@@ -1,34 +1,29 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": 1
-    },
-    {
-      "name": "Ada Lovelace",
-      "number": "39-44-5323523",
-      "id": 2
-    },
-    {
-      "name": "Dan Abramov",
-      "number": "12-43-234345",
-      "id": 3
-    },
-    {
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
-      "id": 4
-    },
-    {
-      "name": "Jukka Pekka",
-      "number": "040-6578934",
-      "id": 5
-    },
-    {
       "name": "Johny Depp",
       "number": "050-666777333",
       "id": 6
+    },
+    {
+      "name": "Vladimir Putin",
+      "number": "040-6661488",
+      "id": 8
+    },
+    {
+      "name": "Jukka Virtanen",
+      "number": "038-4568769",
+      "id": 10
+    },
+    {
+      "name": "Lebron James",
+      "number": "050-234567",
+      "id": 12
+    },
+    {
+      "name": "Johny Banana",
+      "number": "23425364576",
+      "id": 13
     }
   ]
 }

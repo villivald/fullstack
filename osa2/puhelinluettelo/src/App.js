@@ -1,30 +1,32 @@
 import React, { useState, useEffect } from "react"
-import axios from "axios"
 import Search from "./components/Search"
 import ListToShow from "./components/ListToShow"
+import noteService from './services/notes'
+import Notification from './components/Notification'
+import Error from "./components/Error"
 
 const App = (props) => {
   const [notes, setNotes] = useState(props.notes)
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [errorMessage2, setErrorMessage2] = useState(null)
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setNotes(response.data)
+    noteService
+      .getAll()
+      .then(initialNotes => {
+        setNotes(initialNotes)
       })
   }, [])
 
   const handleNoteChange = (event) => {
     setNewName(event.target.value)
   }
-
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value)
   }
-
   const handleListChange = (event) => {
     setSearch(event.target.value)
   }
@@ -36,20 +38,41 @@ const App = (props) => {
       number: newNumber,
     }
 
-    axios
-    .post('http://localhost:3001/persons', noteObject)
-    .then(response => {
-      setNotes(notes.concat(response.data))
-      setNewName('')
-    })
-
     if(notes.some(note => note.name === newName)) {
-      window.alert(` ${newName} is already added to phonebook`);
+      window.alert(` ${newName} is already added to the phonebook`);
     }
     else {
-    setNotes(notes.concat(noteObject))
-    setNewName('')
-    setNewNumber("")
+      noteService
+      .create(noteObject)
+      .then(returnedNote => {
+        setNotes(notes.concat(returnedNote))
+        setNewName("")
+        setNewNumber("")
+        setErrorMessage(
+          `${newName} was added to the phonebook`
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
+    }
+  }
+  const handleRemove = (id) => {
+    const listToRemove = notes.filter(note => note.id === id)
+      if (listToRemove.length > 0) {
+        if (window.confirm(`Do you really want to delete ${listToRemove[0].name}?`)) { 
+        noteService
+          .remove(id)
+          .then(response => {
+            setNotes(notes.filter(note => note.id !== id))
+            setErrorMessage2(
+              `${listToRemove[0].name} was removed from the phonebook`
+            )
+            setTimeout(() => {
+              setErrorMessage2(null)
+            }, 5000)
+        })
+      }
     }
   }
 
@@ -57,6 +80,8 @@ const App = (props) => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage} />
+      <Error message={errorMessage2} />
       <Search value={search} onChange={handleListChange} />
 
       <h2>Add a new</h2>
@@ -72,7 +97,7 @@ const App = (props) => {
       <h2>Numbers</h2>
 
       <ListToShow notes={notes.filter(note => 
-        note.name.match(new RegExp(search, 'i')))}/>   
+        note.name.match(new RegExp(search, 'i')))} onDelete={handleRemove}/>  
 
     </div>
   )

@@ -1,9 +1,11 @@
 import React from 'react'
 
-const Note = ({ note }) => {
+const Note = ({ note, onDelete }) => {
+    
   return (
     <p>
       {note.name}   {note.number}
+      <button text='delete' onClick={onDelete}>Delete</button>
     </p>
   )
 }
