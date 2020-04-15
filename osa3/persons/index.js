@@ -2,6 +2,10 @@ const express = require('express')
 const app = express()
 app.use(express.json())
 
+const morgan = require('morgan');
+
+console.log(app.use(morgan("tiny")));
+
 let persons = [{
     id: 1,
     name: 'Arto Hellas',
